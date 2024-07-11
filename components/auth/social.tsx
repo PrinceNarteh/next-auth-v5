@@ -11,7 +11,7 @@ export const Social = () => {
         <FcGoogle className="size-5 mr-2" />
         Google
       </Button>
-      <Button size="lg" className="w-full">
+      <Button size="lg" variant="outline" className="w-full border-black">
         <FaGithub className="size-5 mr-2" />
         Github
       </Button>
