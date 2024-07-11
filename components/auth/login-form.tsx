@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
+import { FormError } from "../shared/form-error";
+import { FormSuccess } from "../shared/form-success";
 
 type FormType = z.infer<typeof LoginSchema>;
 
@@ -27,7 +29,7 @@ export const LoginForm = () => {
     resolver: zodResolver(LoginSchema),
   });
 
-  const onSubmit = (data: FormType) => { };
+  const onSubmit = (data: FormType) => {};
 
   return (
     <CardWrapper
@@ -69,6 +71,8 @@ export const LoginForm = () => {
                 </FormItem>
               )}
             />
+            <FormError message="" />
+            <FormSuccess message="" />
             <Button type="submit" className="w-full">
               Login
             </Button>
