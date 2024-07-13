@@ -1,9 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema, LoginSchemaType } from "@/schemas";
-import { CardWrapper } from "@/components/auth/card-wrapper";
+import { useState, useTransition } from "react";
 import {
   Form,
   FormControl,
@@ -13,30 +11,33 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "../ui/button";
-import { FormError } from "../shared/form-error";
-import { FormSuccess } from "../shared/form-success";
-import { useState, useTransition } from "react";
-import { loginAction } from "@/actions/login.action";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormError } from "@/components/shared/form-error";
+import { CardWrapper } from "@/components/auth/card-wrapper";
+import { FormSuccess } from "@/components/shared/form-success";
+import { registerAction } from "@/actions/register.action";
+import { RegisterSchema, RegisterSchemaType } from "@/schemas";
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
   const [message, setMessage] = useState<{
     error: string | undefined;
     success: string | undefined;
   }>({ success: "", error: "" });
   const [isPending, startTransition] = useTransition();
-  const form = useForm<LoginSchemaType>({
+  const form = useForm<RegisterSchemaType>({
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(RegisterSchema),
   });
 
-  const onSubmit = (data: LoginSchemaType) => {
+  const onSubmit = (data: RegisterSchemaType) => {
     setMessage({ error: "", success: "" });
     startTransition(() => {
-      loginAction(data).then((data) => {
+      registerAction(data).then((data) => {
         setMessage({
           success: data.success,
           error: data.error,
@@ -48,13 +49,31 @@ export const LoginForm = () => {
   return (
     <CardWrapper
       headerLabel="Welcome Back!"
-      backButtonLabel="Don't have an account?"
-      backButtonHref="/auth/register"
+      backButtonLabel="Already have an account?"
+      backButtonHref="/auth/login"
       showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
+            <FormField
+              name="name"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="name"
+                      placeholder="John Doe"
+                      disabled={isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               name="email"
               control={form.control}
@@ -94,7 +113,7 @@ export const LoginForm = () => {
             <FormError message={message.error} />
             <FormSuccess message={message.success} />
             <Button type="submit" className="w-full" disabled={isPending}>
-              Login
+              Register
             </Button>
           </div>
         </form>
