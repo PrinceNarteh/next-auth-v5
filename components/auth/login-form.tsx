@@ -1,23 +1,16 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, LoginSchemaType } from "@/schemas";
 import { CardWrapper } from "@/components/auth/card-wrapper";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "../ui/button";
-import { FormError } from "../shared/form-error";
-import { FormSuccess } from "../shared/form-success";
-import { useState, useTransition } from "react";
+import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { FormError } from "@/components/shared/form-error";
+import { FormSuccess } from "@/components/shared/form-success";
 import { loginAction } from "@/actions/login.action";
+import { InputField } from "@/components/shared/input-field";
 
 export const LoginForm = () => {
   const [message, setMessage] = useState<{
@@ -55,41 +48,19 @@ export const LoginForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
-            <FormField
+            <InputField
+              type="email"
+              label="Email"
               name="email"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="john.doe@email.com"
-                      disabled={isPending}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              placeholder="john.doe@email.com"
+              disabled={isPending}
             />
-            <FormField
+            <InputField
+              type="password"
+              label="Password"
               name="password"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="********"
-                      disabled={isPending}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              placeholder="******"
+              disabled={isPending}
             />
             <FormError message={message.error} />
             <FormSuccess message={message.success} />
